@@ -10,14 +10,20 @@ boxes = cross(rows, cols)
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-#get the diagonals
+
+# get the diagonals
 first_diagonal_unit = [ [rows[j] + cols[j] for j in range(0,9)] ]
 second_diagonal_unit =[ [rows[j] + cols[8-j] for j in range(0,9)] ]
+
+# combine all units into a list of units
 unitlist = row_units + column_units + square_units + first_diagonal_unit + second_diagonal_unit
+
+# get peers as dictionary with key being the rows and values being an array of peers for that row
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
 assignments = []
+
 def assign_value(values, box, value):
     """
     Please use this function to update your values dictionary!
@@ -45,14 +51,15 @@ def naked_twins(values):
             for k in range(j+1, len(unit)):
                 if len(values[unit[j]]) == 2 and values[unit[j]] == values[unit[k]]:
                     naked_twin_dict[values[unit[j]]].append(m)
-    		
-        for twin in naked_twin_dict:
-            for unit_num in naked_twin_dict[twin]:
-        	    for box in unitlist[unit_num]:
-        		    if values[box] != twin:
-        		        for digit in twin:
-        			        values[box] = values[box].replace(digit, '')
-    # Eliminate the naked twins as possibilities for their peers
+    
+    # Eliminate the naked twins as possibilities for their peers		
+    for twin in naked_twin_dict:
+        for unit_num in naked_twin_dict[twin]:
+            for box in unitlist[unit_num]:
+                if values[box] != twin:
+                    for digit in twin:
+                    	values = assign_value(values, box, values[box].replace(digit, ''))
+ 
     return values
 
 def grid_values(grid):
@@ -99,7 +106,7 @@ def eliminate(values):
     for box in solved_values:
         digit = values[box]
         for peer in peers[box]:
-            values[peer] = values[peer].replace(digit,'')
+            values = assign_value(values, peer, values[peer].replace(digit, ''))
     return values
 
 def only_choice(values):
@@ -112,7 +119,7 @@ def only_choice(values):
         for digit in '123456789':
             dplaces = [box for box in unit if digit in values[box]]
             if len(dplaces) == 1:
-                values[dplaces[0]] = digit
+                values = assign_value(values, dplaces[0], digit)
     return values
 
 def reduce_puzzle(values):
