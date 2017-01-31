@@ -7,7 +7,7 @@ A: Naked twins occur when there are two boxes in the same unit with identically 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: We deduce constraints that follow from the logic of the sudoku puzzle. For a diagonal sudoku problem, these includes the constraint on the diagonals. In particular we elimiminate unallowed digits, apply the naked twins operation, and fill in boxes when there is only one allowed valued for that box. These prunes the space of possibilities. We then recursively apply depth first search in a smart way, only branching out along a path with the smallest number of possibilities each time, until we find the solution.
+A: We deduce constraints that follow from the logic of the sudoku puzzle. For a diagonal sudoku problem, these includes the constraint on the diagonals. In particular we elimiminate unallowed digits, apply the naked twins operation, and fill in boxes when there is only one allowed valued for that box. These prunes the space of possibilities. We do this recursively and apply depth first search in a smart way, only branching out along a path with the smallest number of possibilities each time, until we find the solution.
 
 ### Install
 
